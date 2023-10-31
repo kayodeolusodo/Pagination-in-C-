@@ -1,0 +1,125 @@
+// Written by Kayode Olusodo
+
+public class Itemzn
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+
+public class Pagingnation
+    {
+        int idx = 0;
+        int count = 0; // used to count the number of items in a page
+        List<Pages_> paging_pages = new List<Pages_>();
+        List<Itemzn> itms = new List<Itemzn>();
+        public List<Pages_> GetPagingnation(List<Itemzn> itm, int pagecount)
+        {
+            try
+            {
+                itms = itm;
+                List<Itemzn> page = new List<Itemzn>();
+
+                for (int i = 0; i <= itm.Count - 1; i++)
+                {
+                    if (count <= pagecount)
+                    {
+                        page.Add(itm[i]);
+                        count += 1;
+                    }
+                    else
+                    {
+                        Pages_ _pages = new Pages_();
+                        idx += 1;
+                        _pages.Index_ = idx;
+
+                        foreach(var _itm in page)
+                        {
+                            _pages.Itemsz.Add(_itm);
+                        }
+
+                        page.Clear();
+                        count = 0;
+                        paging_pages.Add(_pages);
+                    }
+                }
+
+                return paging_pages;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+        }
+    }
+
+    public class Pages_
+    {
+        public int Index_ { get; set; }   // 
+        public List<Itemzn> Itemsz = new List<Itemzn>();
+    }
+
+
+  List<Itemzn> itemzs = new List<Itemzn>();  
+	List<Pages_> _pages = new List<Pages_>();
+  Pagingnation paging = new Pagingnation();
+	int pagesize = 0;
+	int presentpage = 0;
+  private async void Page_Loaded(object sender, EventArgs e)
+	{
+		  try
+		  {
+            itemzs = await ...Get your items from web api or database
+            presentpage += 1;
+            _pages = paging.GetPagingnation(itemzs, 15);  
+
+		      	LoadItem();
+        }
+        catch (Exception ex)
+		{
+
+		}
+	}
+
+	private void LoadItem()
+	{
+      try 
+		  {
+          if (_pages.Count > 0)
+          {
+              pagesize = _pages.Count; // Return the number of pages in Pages_
+
+      				if (presentpage <= pagesize)
+      				{
+      					foreach (var itm in _pages)
+      					{
+      						if (itm.Index_ == presentpage)
+      						{
+                      ItemsLstView.ItemsSource = itm.Itemsz;   // Adding the data to listview
+                      PageinfoLabel.Text = "Page " + presentpage + " of " + pagesize;
+                      break;
+      						}
+      					}
+      				}
+            }
+        }
+        catch (Exception ex)
+		{
+
+		}
+	}
+
+	private void btnPreviousPage_Clicked(object sender, EventArgs e)
+	{
+		if(presentpage > 1)
+		{
+			presentpage -= 1;
+			LoadItem();
+    }
+  }
+	
+	private void btnNextPage_Clicked(object sender, EventArgs e)
+	{
+		presentpage += 1;
+		LoadItem();
+  }
