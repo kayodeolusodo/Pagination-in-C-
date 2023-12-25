@@ -19,6 +19,7 @@ public class Itemzn
         {
             try
             {
+                int lastindexprocess = 0; //count all items added to page
                 itms = itm;
                 List<Itemzn> page = new List<Itemzn>();
                 totalitemsRemain = itm.Count;
@@ -58,7 +59,7 @@ public class Itemzn
                 if (totalitemsRemain > 0 && totalitemsRemain < pagecount)
                 {
 
-                    for (int i = 1; i <= totalitemsRemain - 1; i++)
+                    for (int i = lastindexprocess; i <= itm.Count - 1; i++) // continue adding remaining items to page 
                     {
                        page.Add(itm[i]);
                     }
