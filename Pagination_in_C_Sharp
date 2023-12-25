@@ -7,6 +7,12 @@ public class Itemzn
 }
 
 
+    public class Pages_
+    {
+        public int Index_ { get; set; }   // 
+        public List<Itemzn> Itemsz = new List<Itemzn>();
+    }
+
  public class Pagingnation
     {
         int idx = 0;
@@ -47,7 +53,7 @@ public class Itemzn
                             paging_pages.Add(_pages);
 
                             totalitemsRemain -= pagecount;
-
+                            lastindexprocess += pagecount;
                             if (totalitemsRemain < pagecount)
                             {
                                 break;
@@ -88,27 +94,21 @@ public class Itemzn
     }
 
 
-    public class Pages_
-    {
-        public int Index_ { get; set; }   // 
-        public List<Itemzn> Itemsz = new List<Itemzn>();
-    }
-
 
   List<Itemzn> itemzs = new List<Itemzn>();  
-	List<Pages_> _pages = new List<Pages_>();
+  List<Pages_> _pages = new List<Pages_>();
   Pagingnation paging = new Pagingnation();
-	int pagesize = 0;
-	int presentpage = 0;
+  int pagesize = 0;
+  int presentpage = 0;
   private async void Page_Loaded(object sender, EventArgs e)
+  {
+	try
 	{
-		  try
-		  {
             itemzs = await ...Get your items from web api or database
             presentpage += 1;
             _pages = paging.GetPagingnation(itemzs, 15);  
 
-		      	LoadItem();
+	     LoadItem();
         }
         catch (Exception ex)
 		{
@@ -118,8 +118,8 @@ public class Itemzn
 
 	private void LoadItem()
 	{
-      try 
-		  {
+        try 
+	{
           if (_pages.Count > 0)
           {
               pagesize = _pages.Count; // Return the number of pages in Pages_
